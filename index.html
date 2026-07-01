@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
 
@@ -20,7 +21,7 @@
   <div class="brand-panel">
     <span class="brand-panel__mark" aria-hidden="true">V</span>
     <div class="brand-panel__scanline" aria-hidden="true"></div>
-    
+
     <div class="brand-panel__content">
       <div class="logo">
         <span class="logo__mark">∆</span>
@@ -41,17 +42,7 @@
         Continue with your Google account to securely access the esports dashboard.
       </p>
 
-      <button id="google-btn" class="auth-btn" type="button">
-        <span class="auth-btn__icon">
-          <svg viewBox="0 0 48 48" width="20" height="20" aria-hidden="true">
-            <path fill="#4285F4" d="M46.5 24.5c0-1.6-.15-3.15-.42-4.64H24v9.03h12.65c-.55 2.9-2.2 5.36-4.7 7.02v5.83h7.6c4.45-4.1 7-10.13 7-17.24z"/>
-            <path fill="#34A853" d="M24 47c6.35 0 11.67-2.1 15.55-5.66l-7.6-5.83c-2.11 1.4-4.8 2.24-7.95 2.24-6.11 0-11.29-4.12-13.14-9.66H2.99v6.02C6.85 41.86 14.8 47 24 47z"/>
-            <path fill="#FBBC05" d="M10.86 27.99A13.9 13.9 0 0 1 10.14 24c0-1.39.24-2.74.65-4.01v-6.02H2.99A22.94 22.94 0 0 0 1 24c0 3.71.89 7.22 2.99 10.03l7.87-6.04z"/>
-            <path fill="#EA4335" d="M24 9.5c3.45 0 6.55 1.19 8.99 3.52l6.74-6.74C35.65 2.38 30.33 0 24 0 14.8 0 6.85 5.14 2.99 12.97l7.87 6.02C12.71 13.62 17.89 9.5 24 9.5z"/>
-          </svg>
-        </span>
-        <span>Continue with Google</span>
-      </button>
+      <div id="google-btn"></div>
 
       <p class="auth-card__terms">
         By continuing, you agree to the Persian Esports Terms and Privacy Policy.
