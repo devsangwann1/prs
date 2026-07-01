@@ -17,38 +17,43 @@ function hideLoading() {
   loadingScreen.style.opacity = "0";
   setTimeout(() => {
     loadingScreen.style.display = "none";
-  }, 300);
+  }, 250);
+}
+
+function getRedirectUrl() {
+  return window.location.href.split("?")[0];
 }
 
 function showHome(user) {
-  const name = user.fullName || user.primaryEmailAddress?.emailAddress || "Player";
+  const name =
+    user.fullName ||
+    user.username ||
+    user.primaryEmailAddress?.emailAddress ||
+    "Player";
+
   const email = user.primaryEmailAddress?.emailAddress || "";
-  const avatar = user.imageUrl || "";
+  const avatar = user.imageUrl;
 
   if (userName) userName.textContent = name;
   if (welcomeNameInline) welcomeNameInline.textContent = `, ${name}`;
   if (userEmail) userEmail.textContent = email;
 
   if (userAvatar) {
-    if (avatar) {
-      userAvatar.src = avatar;
-    } else {
-      userAvatar.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=2f5cff&color=ffffff`;
-    }
+    userAvatar.src =
+      avatar ||
+      `https://ui-avatars.com/api/?name=${encodeURIComponent(
+        name
+      )}&background=2f5cff&color=ffffff`;
   }
 
-  if (loginScreen) loginScreen.classList.remove("screen--active");
-  if (homeScreen) homeScreen.classList.add("screen--active");
+  loginScreen?.classList.remove("screen--active");
+  homeScreen?.classList.add("screen--active");
 }
 
 function showLogin() {
-  if (homeScreen) homeScreen.classList.remove("screen--active");
-  if (loginScreen) loginScreen.classList.add("screen--active");
+  homeScreen?.classList.remove("screen--active");
+  loginScreen?.classList.add("screen--active");
   setButtonsDisabled(false);
-}
-
-function getRedirectUrl() {
-  return window.location.origin + window.location.pathname;
 }
 
 async function signInWithGoogle() {
@@ -56,16 +61,19 @@ async function signInWithGoogle() {
     setButtonsDisabled(true);
     document.body.classList.add("auth-loading");
 
-    const redirectUrl = getRedirectUrl();
+    const clerk = window.Clerk;
 
-    await window.Clerk.client.signIn.authenticateWithRedirect({
+    if (!clerk) throw new Error("Clerk not loaded");
+
+    await clerk.openSignIn({
       strategy: "oauth_google",
-      redirectUrl: redirectUrl,
-      redirectUrlComplete: redirectUrl
+      redirectUrl: getRedirectUrl(),
+      afterSignInUrl: getRedirectUrl(),
+      afterSignUpUrl: getRedirectUrl()
     });
   } catch (error) {
-    console.error(error);
-    alert("Google login failed.");
+    console.error("Login error:", error);
+    alert("Google login failed. Try again.");
     document.body.classList.remove("auth-loading");
     setButtonsDisabled(false);
   }
@@ -73,27 +81,13 @@ async function signInWithGoogle() {
 
 async function logout() {
   try {
-    if (homeScreen) homeScreen.classList.remove("screen--active");
-    await window.Clerk.signOut();
+    const clerk = window.Clerk;
+    if (!clerk) return;
+
+    await clerk.signOut();
     showLogin();
   } catch (error) {
-    console.error(error);
-  }
-}
-
-async function completePendingRedirect(clerk) {
-  const hasCallbackParams = /__clerk_/.test(window.location.search);
-  if (!hasCallbackParams) return;
-
-  try {
-    await clerk.handleRedirectCallback({
-      redirectUrl: getRedirectUrl(),
-      redirectUrlComplete: getRedirectUrl()
-    });
-  } catch (error) {
-    console.error(error);
-  } finally {
-    window.history.replaceState({}, document.title, window.location.pathname);
+    console.error("Logout error:", error);
   }
 }
 
@@ -101,39 +95,38 @@ async function initClerk() {
   const clerk = window.Clerk;
 
   if (!clerk) {
-    console.error("Clerk failed to load.");
+    console.error("Clerk failed to load");
     hideLoading();
     showLogin();
     return;
   }
 
   await clerk.load();
-  await completePendingRedirect(clerk);
 
-  document.body.classList.remove("auth-loading");
+  try {
+    await clerk.handleRedirectCallback();
+  } catch (e) {
+    // ignore if no redirect
+  }
+
   hideLoading();
+  document.body.classList.remove("auth-loading");
 
-  if (clerk.user) {
-    showHome(clerk.user);
+  const user = clerk.user;
+
+  if (user) {
+    showHome(user);
   } else {
     showLogin();
   }
 
   clerk.addListener(({ user }) => {
-    if (user) {
-      showHome(user);
-    } else {
-      showLogin();
-    }
+    if (user) showHome(user);
+    else showLogin();
   });
 }
 
-if (googleBtn) {
-  googleBtn.addEventListener("click", signInWithGoogle);
-}
-
-if (logoutBtn) {
-  logoutBtn.addEventListener("click", logout);
-}
+googleBtn?.addEventListener("click", signInWithGoogle);
+logoutBtn?.addEventListener("click", logout);
 
 window.addEventListener("load", initClerk);
