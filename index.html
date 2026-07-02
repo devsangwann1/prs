@@ -209,5 +209,157 @@
     </footer>
 
     <script src="script.js"></script>
+
+<!-- Announcement Popup Start -->
+<div id="announcement-overlay" class="announcement-overlay">
+  <div class="announcement-popup">
+
+    <button id="announcement-close" class="announcement-close">
+      &times;
+    </button>
+
+    <img id="announcement-image" class="announcement-image" src="" alt="Announcement">
+
+    <div class="announcement-content">
+      <h2 id="announcement-title"></h2>
+      <p id="announcement-description"></p>
+
+      <a id="announcement-button" class="announcement-btn" href="#" target="_blank">
+        Click Here
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<style>
+.announcement-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.85);
+  backdrop-filter:blur(8px);
+  display:none;
+  justify-content:center;
+  align-items:flex-start;
+  padding:40px 15px;
+  z-index:999999;
+}
+
+.announcement-popup{
+  width:100%;
+  max-width:520px;
+  background:#0b0f19;
+  border:1px solid rgba(0,123,255,.4);
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 0 35px rgba(0,123,255,.35);
+  animation:popupShow .35s ease;
+  position:relative;
+}
+
+.announcement-image{
+  width:100%;
+  height:250px;
+  object-fit:cover;
+  display:block;
+}
+
+.announcement-content{
+  padding:22px;
+}
+
+.announcement-content h2{
+  color:#fff;
+  margin:0 0 10px;
+  font-size:1.5rem;
+}
+
+.announcement-content p{
+  color:#b7c3d4;
+  line-height:1.6;
+  margin-bottom:20px;
+}
+
+.announcement-btn{
+  display:block;
+  text-align:center;
+  text-decoration:none;
+  background:linear-gradient(135deg,#0066ff,#00a2ff);
+  color:#fff;
+  padding:14px;
+  border-radius:12px;
+  font-weight:700;
+  transition:.25s;
+}
+
+.announcement-btn:hover{
+  transform:translateY(-2px);
+}
+
+.announcement-close{
+  position:absolute;
+  top:10px;
+  right:10px;
+  width:40px;
+  height:40px;
+  border:none;
+  border-radius:50%;
+  cursor:pointer;
+  background:rgba(0,0,0,.65);
+  color:#fff;
+  font-size:24px;
+}
+
+@keyframes popupShow{
+  from{
+    opacity:0;
+    transform:translateY(-25px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+
+  try {
+    const response = await fetch("./announcement.json?v=" + Date.now());
+    const data = await response.json();
+
+    if (!data.active) return;
+
+    document.getElementById("announcement-title").textContent =
+      data.title || "";
+
+    document.getElementById("announcement-description").textContent =
+      data.description || "";
+
+    document.getElementById("announcement-image").src =
+      data.image || "";
+
+    document.getElementById("announcement-button").textContent =
+      data.buttonText || "Click Here";
+
+    document.getElementById("announcement-button").href =
+      data.buttonLink || "#";
+
+    document.getElementById("announcement-overlay").style.display = "flex";
+
+    document.getElementById("announcement-close")
+      .addEventListener("click", () => {
+        document.getElementById("announcement-overlay").style.display = "none";
+      });
+
+  } catch (error) {
+    console.log("Announcement disabled or missing announcement.json");
+  }
+
+});
+</script>
+<!-- Announcement Popup End -->
+
 </body>
 </html>
