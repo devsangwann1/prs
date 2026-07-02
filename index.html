@@ -210,7 +210,6 @@
 
     <script src="script.js"></script>
 
-<!-- Announcement Popup Start -->
 <div id="announcement-overlay" class="announcement-overlay">
   <div class="announcement-popup">
 
@@ -233,91 +232,117 @@
 </div>
 
 <style>
-.announcement-overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.85);
-  backdrop-filter:blur(8px);
-  display:none;
-  justify-content:center;
-  align-items:flex-start;
-  padding:40px 15px;
-  z-index:999999;
+.announcement-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(20px) cubic-bezier(0.25, 0.8, 0.25, 1);
+  -webkit-backdrop-filter: blur(20px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  z-index: 999999;
 }
 
-.announcement-popup{
-  width:100%;
-  max-width:520px;
-  background:#0b0f19;
-  border:1px solid rgba(0,123,255,.4);
-  border-radius:18px;
-  overflow:hidden;
-  box-shadow:0 0 35px rgba(0,123,255,.35);
-  animation:popupShow .35s ease;
-  position:relative;
+.announcement-popup {
+  width: 100%;
+  max-width: 440px;
+  background: rgba(28, 28, 30, 0.75);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  animation: applePopupShow 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
 }
 
-.announcement-image{
-  width:100%;
-  height:250px;
-  object-fit:cover;
-  display:block;
+.announcement-image {
+  width: 100%;
+  height: 210px;
+  object-fit: cover;
+  display: block;
 }
 
-.announcement-content{
-  padding:22px;
+.announcement-content {
+  padding: 24px;
+  text-align: center;
+  font-family: 'Inter', sans-serif;
 }
 
-.announcement-content h2{
-  color:#fff;
-  margin:0 0 10px;
-  font-size:1.5rem;
+.announcement-content h2 {
+  color: #ffffff;
+  margin: 0 0 8px;
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
 }
 
-.announcement-content p{
-  color:#b7c3d4;
-  line-height:1.6;
-  margin-bottom:20px;
+.announcement-content p {
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.5;
+  font-size: 0.95rem;
+  margin-bottom: 24px;
+  font-weight: 400;
 }
 
-.announcement-btn{
-  display:block;
-  text-align:center;
-  text-decoration:none;
-  background:linear-gradient(135deg,#0066ff,#00a2ff);
-  color:#fff;
-  padding:14px;
-  border-radius:12px;
-  font-weight:700;
-  transition:.25s;
+.announcement-btn {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  background: #0071e3;
+  color: #ffffff;
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 
-.announcement-btn:hover{
-  transform:translateY(-2px);
+.announcement-btn:hover {
+  background: #147ce5;
+  transform: scale(1.01);
 }
 
-.announcement-close{
-  position:absolute;
-  top:10px;
-  right:10px;
-  width:40px;
-  height:40px;
-  border:none;
-  border-radius:50%;
-  cursor:pointer;
-  background:rgba(0,0,0,.65);
-  color:#fff;
-  font-size:24px;
+.announcement-btn:active {
+  background: #0066cc;
+  transform: scale(0.99);
 }
 
-@keyframes popupShow{
-  from{
-    opacity:0;
-    transform:translateY(-25px);
+.announcement-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, color 0.2s;
+  z-index: 10;
+}
+
+.announcement-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+@keyframes applePopupShow {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
   }
-  to{
-    opacity:1;
-    transform:translateY(0);
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 </style>
@@ -359,7 +384,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 });
 </script>
-<!-- Announcement Popup End -->
 
 </body>
 </html>
